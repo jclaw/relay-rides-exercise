@@ -3,10 +3,41 @@
 <head>
 <meta charset="utf-8">
     <title>Relay Rides Exercise</title>
-    <script src="js/main.js"></script>
+
+
+    <script language="javascript" type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="node_modules/angular/angular.js"></script>
+	<script language="javascript" type="text/javascript" src="Pikaday/pikaday.js"></script>
+	<script language="javascript" type="text/javascript" src="Pikaday/plugins/pikaday.jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="js/app.js"></script>
+
+
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="Pikaday/css/pikaday.css">
     <link rel="stylesheet" href="css/main.css">
 </head>
-<body>
-    <h1>Hello</h1>
+<body ng-app="main">
+    <div class="container">
+    	<div class="spacer">
+    	</div>
+    	<div class="wrapper col-md-8 col-md-offset-2">
+    		
+    		<div class="row input_fields" ng-controller="InputController">
+    			<input type="text" class="form-control" id="start" placeholder="Start date">
+    			<input type="text" class="form-control" id="end" placeholder="End date">
+		      	<input type="text" class="form-control" placeholder="Pick a destination">
+		        <button class="btn btn-default" type="button" ng-click='getResults("test")'>Search</button>
+
+		    </div>
+		    <div ng-controller="ListingsController">
+		    </div>
+    	</div>
+
+    	
+    </div>
+
+
+
 </body>
+
 </html>

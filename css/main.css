@@ -1,0 +1,48 @@
+
+body {
+	height: 100vh;
+}
+
+.container {
+
+	height: 100%;
+
+}
+
+.spacer {
+	width: 100%;
+	height: 20%;
+}
+
+.wrapper {
+
+}
+
+.btn {
+	color: white;
+	font-weight: 400;
+	background-color: #217668;
+	border-color: #217668;
+}
+
+
+.input_fields .form-control {
+	width: auto;
+	display: inline-block;
+	margin-right: -4px;
+	border-right: none;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+
+.input_fields > :not(:first-child):not(:last-child) {
+	border-radius: 0px;
+}
+
+.input_fields .btn {
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	margin-left: -1px;
+	margin-bottom: 2px;
+	width: 15%;
+}
