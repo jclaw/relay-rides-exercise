@@ -102,24 +102,14 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
     	$scope.greeting = greeter.greet(user.name);
         $scope.getResults = function(item) {
             
-            var url         = "http://api.hotwire.com/v1/search/car?",
-                key         = "vcn2bew8atv5dgtqtnjmncw3",
-                dest        = "LAX",
-                startdate   = "11/01/2015",
-                enddate     = "11/10/2015",
-                pickuptime  = "09:30",
-                dropofftime = "13:00";
-
+/*
             var request = url + "apikey=" + key + "&dest=" + dest + "&startdate=" + startdate + "&enddate=" +
                           enddate + "&pickuptime=" + pickuptime + "&dropofftime=" + dropofftime;
-            
+*/            
             
             $http({
                 method: 'GET',
-                url: url + "apikey=" + key,
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
+                url: 'http://relay-rides-server.herokuapp.com/getResults/',
                 data: {
                     dest:        "LAX",
                     startdate:   "11/01/2015",
