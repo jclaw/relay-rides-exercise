@@ -106,8 +106,7 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
             var request = url + "apikey=" + key + "&dest=" + dest + "&startdate=" + startdate + "&enddate=" +
                           enddate + "&pickuptime=" + pickuptime + "&dropofftime=" + dropofftime;
 */            
-            
-            $http({
+            var req = {
                 method: 'GET',
                 url: 'http://relay-rides-server.herokuapp.com/getResults/',
                 data: {
@@ -117,7 +116,9 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
                     pickuptime:  "09:30",
                     dropofftime: "13:00"
                 }
-            }).then(function successCallback(response) {
+            };
+
+            $http(req).then(function successCallback(response) {
                 $scope.results = data;
                 console.log("SUCCESS");
                 console.log(status);
