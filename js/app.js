@@ -107,20 +107,25 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
             var request = url + "apikey=" + key + "&dest=" + dest + "&startdate=" + startdate + "&enddate=" +
                           enddate + "&pickuptime=" + pickuptime + "&dropofftime=" + dropofftime;
 */            
+
+/*
             var req = {
                 method: 'GET',
                 url: 'http://relay-rides-server.herokuapp.com/getResults/',
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                data: {
+                
+                data: $.param({dest: "LAX"}),
+                    
                     dest:        "LAX",
                     startdate:   "11/01/2015",
                     enddate:     "11/10/2015",
                     pickuptime:  "09:30",
                     dropofftime: "13:00"
-                },
-                dataType: "text"
+                    
+                //,
+                //dataType: "text"
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
             };
 
             $http(req).then(function successCallback(response) {
@@ -133,6 +138,29 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
                 console.log(status);
             });
 
+
+*/
+            $.ajax({
+                type: 'GET',
+                url: 'http://relay-rides-server.herokuapp.com/getResults/',
+                data: {
+                    dest:        "LAX",
+                    startdate:   "11/01/2015",
+                    enddate:     "11/10/2015",
+                    pickuptime:  "09:30",
+                    dropofftime: "13:00"
+                }
+            })
+            .done(function successCallback(response) {
+                $scope.results = data;
+                console.log("SUCCESS");
+                console.log(status);
+                console.log(data);
+            })
+            .fail(function errorCallback(response) {
+                console.log("ERROR");
+                console.log(status);
+            });
 
         }
         $scope.requestinfo = {
