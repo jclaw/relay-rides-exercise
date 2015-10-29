@@ -98,10 +98,11 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
 */
     })
 
-    .controller('InputController', function($scope, $http, greeter, user) {
+    .controller('InputController', function($scope, $httpProvider, greeter, user) {
     	$scope.greeting = greeter.greet(user.name);
         $scope.getResults = function(item) {
-            
+        // Use x-www-form-urlencoded Content-Type
+        //$httpProvider.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 /*
             var request = url + "apikey=" + key + "&dest=" + dest + "&startdate=" + startdate + "&enddate=" +
                           enddate + "&pickuptime=" + pickuptime + "&dropofftime=" + dropofftime;
@@ -109,6 +110,9 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
             var req = {
                 method: 'GET',
                 url: 'http://relay-rides-server.herokuapp.com/getResults/',
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
                 data: {
                     dest:        "LAX",
                     startdate:   "11/01/2015",
