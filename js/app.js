@@ -115,7 +115,8 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
                     enddate:     "11/10/2015",
                     pickuptime:  "09:30",
                     dropofftime: "13:00"
-                }
+                },
+                dataType: "text"
             };
 
             $http(req).then(function successCallback(response) {
