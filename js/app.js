@@ -98,7 +98,7 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
 */
     })
 
-    .controller('InputController', function($scope, $httpProvider, greeter, user) {
+    .controller('InputController', function($scope, $http, greeter, user) {
     	$scope.greeting = greeter.greet(user.name);
         $scope.getResults = function(item) {
         // Use x-www-form-urlencoded Content-Type
