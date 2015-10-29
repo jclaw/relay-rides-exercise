@@ -98,9 +98,9 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
 */
     })
 
-    .controller('InputController', function($scope, $http, greeter, user) {
+    .controller('InputController', function($scope, greeter, user) {
     	$scope.greeting = greeter.greet(user.name);
-        $scope.getResults = function(item) {
+        $scope.getResults = function() {
         // Use x-www-form-urlencoded Content-Type
         //$httpProvider.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 /*
@@ -144,31 +144,25 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
                 type: 'GET',
                 url: 'http://relay-rides-server.herokuapp.com/getResults/',
                 data: {
-                    dest:        "LAX",
+                    dest: "LAX",
                     startdate:   "11/01/2015",
                     enddate:     "11/10/2015",
                     pickuptime:  "09:30",
                     dropofftime: "13:00"
-                }
+                },
+                dataType: "text"
             })
-            .done(function successCallback(response) {
+            .done(function(data, status) {
                 $scope.results = data;
                 console.log("SUCCESS");
                 console.log(status);
                 console.log(data);
             })
-            .fail(function errorCallback(response) {
+            .fail(function(response, status) {
                 console.log("ERROR");
                 console.log(status);
             });
 
-        }
-        $scope.requestinfo = {
-            dest: "LAX",
-            startdate: "11/01/2015",
-            enddate: "11/28/2015",
-            pickuptime: "9:30",
-            dropofftime: "13:30"
         };
 
     });
