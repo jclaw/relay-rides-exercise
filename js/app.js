@@ -3,10 +3,42 @@
 
 
 angular.module('viz', [])
+/*
     .controller('ListingsController', ['$scope', function($scope, data) {
     	$scope.listings = data;
     }]);
+*/
 
+    .controller('ListingsController', function($scope, greeter, user) {
+        $scope.greeting = greeter.greet(user.name);
+        /*
+        $scope.test = function() {
+            console.log("here");
+            $.ajax({
+              type: "GET",
+              url: "http://relay-rides-server.herokuapp.com/test/",
+              data: {login: "test", grocery: "g"},
+              dataType: "text"
+            })
+            .done(function(response, status) {
+                $scope.results = response;
+                console.log("SUCCESS");
+                console.log(status);
+                console.log(response);
+            })
+            .fail(function(response, status) {
+                console.log("ERROR");
+                console.log(status);
+            });
+
+        };
+        */
+        console.log("listings controller");
+        console.log("$scope.results_xml: " + $scope.results_xml);
+        var results = $.parseXML($scope.results_xml);
+        $("#results").append(results);
+
+    });
 angular.module('xmpl.service', [])
 
     .value('greeter', {
@@ -44,6 +76,12 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
                 startPicker.setStartRange(startDate);
                 endPicker.setStartRange(startDate);
                 endPicker.setMinDate(startDate);
+                console.log(startDate);
+                console.log(startDate.toDateString());
+                console.log(startDate.getDate());
+                var d = startDate.format("MM/dd/yyyy");
+                console.log(d);
+                //$scope.request_info.startdate;
             },
             updateEndDate = function() {
                 startPicker.setEndRange(endDate);
@@ -100,63 +138,35 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
 
     .controller('InputController', function($scope, greeter, user) {
     	$scope.greeting = greeter.greet(user.name);
+        $scope.request_info = {
+            dest: "LAX",
+            startdate:   "11/01/2015",
+            enddate:     "11/10/2015",
+            pickuptime:  "09:30",
+            dropofftime: "13:00"
+        };
         $scope.getResults = function() {
-        // Use x-www-form-urlencoded Content-Type
-        //$httpProvider.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-/*
-            var request = url + "apikey=" + key + "&dest=" + dest + "&startdate=" + startdate + "&enddate=" +
-                          enddate + "&pickuptime=" + pickuptime + "&dropofftime=" + dropofftime;
-*/            
-
-/*
-            var req = {
-                method: 'GET',
-                url: 'http://relay-rides-server.herokuapp.com/getResults/',
-                
-                data: $.param({dest: "LAX"}),
-                    
-                    dest:        "LAX",
-                    startdate:   "11/01/2015",
-                    enddate:     "11/10/2015",
-                    pickuptime:  "09:30",
-                    dropofftime: "13:00"
-                    
-                //,
-                //dataType: "text"
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                }
-            };
-
-            $http(req).then(function successCallback(response) {
-                $scope.results = data;
-                console.log("SUCCESS");
-                console.log(status);
-                console.log(data);
-            }, function errorCallback(response) {
-                console.log("ERROR");
-                console.log(status);
-            });
-
-
-*/
             $.ajax({
-                type: 'GET',
+                type: 'POST',
                 url: 'http://relay-rides-server.herokuapp.com/getResults/',
-                data: {
-                    dest: "LAX",
-                    startdate:   "11/01/2015",
-                    enddate:     "11/10/2015",
-                    pickuptime:  "09:30",
-                    dropofftime: "13:00"
-                },
+                data: $scope.request_info,
                 dataType: "text"
             })
             .done(function(data, status) {
                 $scope.results = data;
                 console.log("SUCCESS");
                 console.log(status);
-                console.log(data);
+                var json = $.parseJSON(data);
+                var response = json.Hotwire;
+                //console.log(response);
+                $scope.results = response.Result[0].CarResult;
+                $scope.$evalAsync();
+                console.log("$scope.results: ");
+                console.log($scope.results);
+
+
+
+
             })
             .fail(function(response, status) {
                 console.log("ERROR");
@@ -168,3 +178,5 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
     });
 
 })(window.angular);
+
+
