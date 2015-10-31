@@ -55,6 +55,38 @@ angular.module('xmpl.service', [])
     	load: function(name) {
         	this.name = name;
     	}
+    })
+
+    .value('request_values', {
+        dest: "",
+        startdate: "",
+        enddate: "",
+        pickuptime: "",
+        dropofftime: "",
+        initialize: function() {
+            this.dest = "LAX";
+            this.startdate = "11/01/2015";
+            this.enddate = "11/10/2015";
+            this.pickuptime = "09:30";
+            this.dropofftime = "13:00";
+        },
+        set: function(req) {
+            if (req.dest) this.dest = req.dest;
+            if (req.startdate) this.startdate = req.startdate;
+            if (req.enddate) this.enddate = req.enddate;
+            if (req.pickuptime) this.pickuptime = req.pickuptime;
+            if (req.dropofftime) this.dropofftime = req.dropofftime;
+        },
+        get: function() {
+            return {
+                dest: this.dest,
+                startdate: this.startdate,
+                enddate: this.enddate,
+                pickuptime: this.pickuptime,
+                dropofftime: this.dropofftime
+            };
+        }
+
     });
 
 angular.module('xmpl.directive', []);
@@ -63,30 +95,33 @@ angular.module('xmpl.filter', []);
 
 angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
 
-    .run(function(greeter, user) {
+    .run(function(greeter, user, request_values) {
     // This is effectively part of the main method initialization code
     	greeter.localize({
         	salutation: 'Bonjour'
     	});
     	user.load('World');
-
+        request_values.initialize();
         var startDate,
             endDate,
             updateStartDate = function() {
                 startPicker.setStartRange(startDate);
                 endPicker.setStartRange(startDate);
                 endPicker.setMinDate(startDate);
-                console.log(startDate);
-                console.log(startDate.toDateString());
-                console.log(startDate.getDate());
-                var d = startDate.format("MM/dd/yyyy");
-                console.log(d);
-                //$scope.request_info.startdate;
+                request_values.set({
+                    startdate: startDate.format("MM/dd/yyyy")
+                });
+                console.log(request_values.get());
             },
             updateEndDate = function() {
                 startPicker.setEndRange(endDate);
                 startPicker.setMaxDate(endDate);
                 endPicker.setEndRange(endDate);
+
+                request_values.set({
+                    enddate: endDate.format("MM/dd/yyyy")
+                });
+                console.log(request_values.get());
             },
             startPicker = new Pikaday({
                 field: document.getElementById('start'),
@@ -136,42 +171,53 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
 */
     })
 
-    .controller('InputController', function($scope, greeter, user) {
+    .controller('InputController', function($scope, greeter, user, request_values) {
     	$scope.greeting = greeter.greet(user.name);
-        $scope.request_info = {
-            dest: "LAX",
-            startdate:   "11/01/2015",
-            enddate:     "11/10/2015",
-            pickuptime:  "09:30",
-            dropofftime: "13:00"
-        };
+        // $scope.request_info = {
+        //     dest: "LAX",
+        //     startdate:   "11/01/2015",
+        //     enddate:     "11/10/2015",
+        //     pickuptime:  "09:30",
+        //     dropofftime: "13:00"
+        // };
         $scope.getResults = function() {
-            $.ajax({
-                type: 'POST',
-                url: 'http://relay-rides-server.herokuapp.com/getResults/',
-                data: $scope.request_info,
-                dataType: "text"
-            })
-            .done(function(data, status) {
-                $scope.results = data;
-                console.log("SUCCESS");
-                console.log(status);
-                var json = $.parseJSON(data);
-                var response = json.Hotwire;
-                //console.log(response);
-                $scope.results = response.Result[0].CarResult;
-                $scope.$evalAsync();
-                console.log("$scope.results: ");
-                console.log($scope.results);
+            if (request_values.startdate <= request_values.enddate) {
+                console.log(request_values.get());
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://relay-rides-server.herokuapp.com/getResults/',
+                    data: request_values.get(),
+                    dataType: "text"
+                })
+                .done(function(data, status) {
+                    $scope.results = data;
+                    console.log("SUCCESS");
+                    console.log(status);
+                    var json = $.parseJSON(data);
+                    var response = json.Hotwire;
+                    console.log(response);
+                    if (response.Errors[0] = "") {
+                        $scope.results = response.Result[0].CarResult;
+                        $scope.$evalAsync();
+                        console.log("$scope.results: ");
+                        console.log($scope.results);
+                        console.log($scope.results[0].PickupDay + ", " + $scope.results[0].DropoffDay);
+                    } else {
+                        alert("Pickup time is too soon.");
+                    }
+                    
+                    
+                })
+                .fail(function(response, status) {
+                    console.log("ERROR");
+                    console.log(status);
+                });
 
-
-
-
-            })
-            .fail(function(response, status) {
-                console.log("ERROR");
-                console.log(status);
-            });
+            } else {
+                alert("Please enter valid dates!");
+                console.log(request_values.get());
+            }
+            
 
         };
 
