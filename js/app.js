@@ -59,9 +59,12 @@ angular.module('xmpl.service', [])
         pickuptime: "",
         dropofftime: "",
         initialize: function() {
+            var d1 = new Date(), d2 = new Date();
+            d1.setDate(d1.getDate() + 1);
+            d2.setDate(d1.getDate() + 2);
             this.dest = "LAX";
-            this.startdate = "10/31/2015";
-            this.enddate = "11/10/2015";
+            this.startdate = d1.format("MM/dd/yyyy");
+            this.enddate = d2.format("MM/dd/yyyy");
             this.pickuptime = "09:30";
             this.dropofftime = "13:00";
         },
@@ -163,18 +166,35 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
                 for (var j = 0; j < error.length; j++) {
                     errorCode = error[j].ErrorCode;
                     for (var k = 0; k < errorCode.length; k++) {
-                        if (errorCode[k] == "102025") {
-                            alert(error[j].ErrorMessage[k]);
-                        }
+                        alert(error[j].ErrorMessage[k]);
                     }
                 }
             }
         }
 
+        var parseResults = function(response) {
+            var metadata = response.MetaData[0].CarMetaData[0].CarTypes[0].CarType;
+            var results = response.Result[0].CarResult;
+            var output = [{}];
+            var obj;
+            for (var i in results) {
+                for (var j in metadata) {
+                    if (results[i].CarTypeCode[0] == metadata[j].CarTypeCode[0]) {
+                        output[i] = { result: results[i], metadata: metadata[j] };
+                        break;
+                    }
+                }   
+            }
+            return output;
+        }
+
+                                
+
         $scope.location = "";
         $scope.greeting = greeter.greet(user.name);
 
         $scope.getResults = function() {
+            console.log($scope.location);
             if (request_values.startdate <= request_values.enddate) {
                 request_values.set({
                     dest: $scope.location
@@ -196,11 +216,11 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
                     console.log(response);
                     console.log(errors);
                     if (errors[0] == "") {
-                        $scope.results = response.Result[0].CarResult;
+                        $scope.results = parseResults(response);
                         $scope.$evalAsync();
                         console.log("$scope.results: ");
                         console.log($scope.results);
-                        console.log($scope.results[0].PickupDay + ", " + $scope.results[0].DropoffDay);
+                        console.log($scope.results[0].result.PickupDay + ", " + $scope.results[0].result.DropoffDay);
                     } else {
                         console.log("error from api");
                         handleErrors(errors);
