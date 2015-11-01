@@ -65,7 +65,7 @@ angular.module('xmpl.service', [])
         dropofftime: "",
         initialize: function() {
             this.dest = "LAX";
-            this.startdate = "11/01/2015";
+            this.startdate = "10/31/2015";
             this.enddate = "11/10/2015";
             this.pickuptime = "09:30";
             this.dropofftime = "13:00";
@@ -172,7 +172,32 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
     })
 
     .controller('InputController', function($scope, greeter, user, request_values) {
-    	$scope.greeting = greeter.greet(user.name);
+    	var handleErrors = function(errors) {
+            console.log("handleErrors");
+            console.log("errors:");
+            console.log(errors);
+            var error;
+            var errorCode;
+            for (var i = 0; i < errors.length; i++) {
+                console.log(errors[i]);
+                error = errors[i].Error;
+                console.log(error.length);
+                for (var j = 0; j < error.length; j++) {
+                    errorCode = error[j].ErrorCode;
+                    console.log(errorCode);
+                    console.log(errorCode.length);
+                    for (var k = 0; k < errorCode.length; k++) {
+                        console.log(errorCode[k]);
+                        if (errorCode[k] == "102025") {
+                            alert(error[j].ErrorMessage[k]);
+                        }
+                    }
+                }
+            }
+        }
+
+        $scope.location = "";
+        $scope.greeting = greeter.greet(user.name);
         // $scope.request_info = {
         //     dest: "LAX",
         //     startdate:   "11/01/2015",
@@ -182,6 +207,9 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
         // };
         $scope.getResults = function() {
             if (request_values.startdate <= request_values.enddate) {
+                request_values.set({
+                    dest: $scope.location
+                });
                 console.log(request_values.get());
                 $.ajax({
                     type: 'POST',
@@ -195,15 +223,18 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
                     console.log(status);
                     var json = $.parseJSON(data);
                     var response = json.Hotwire;
+                    var errors = response.Errors;
                     console.log(response);
-                    if (response.Errors[0] = "") {
+                    console.log(errors);
+                    if (errors[0] == "") {
                         $scope.results = response.Result[0].CarResult;
                         $scope.$evalAsync();
                         console.log("$scope.results: ");
                         console.log($scope.results);
                         console.log($scope.results[0].PickupDay + ", " + $scope.results[0].DropoffDay);
                     } else {
-                        alert("Pickup time is too soon.");
+                        handleErrors(errors);
+                        
                     }
                     
                     
@@ -217,9 +248,10 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
                 alert("Please enter valid dates!");
                 console.log(request_values.get());
             }
-            
 
         };
+
+
 
     });
 
