@@ -3,11 +3,6 @@
 
 
 angular.module('viz', [])
-/*
-    .controller('ListingsController', ['$scope', function($scope, data) {
-    	$scope.listings = data;
-    }]);
-*/
 
     .controller('ListingsController', function($scope, greeter, user) {
         $scope.greeting = greeter.greet(user.name);
@@ -129,6 +124,10 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
                 maxDate: new Date(2020, 12, 31),
                 onSelect: function() {
                     startDate = this.getDate();
+                    console.log("startDate");
+                    console.log(startDate);
+                    console.log(startDate.getMonth());
+                    endPicker.gotoMonth(startDate.getMonth());
                     updateStartDate();
                 }
             }),
@@ -153,41 +152,17 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
                 endDate = _endDate;
                 updateEndDate();
             }
-        
-
-
-/*
-        var picker = new Pikaday({
-            field: $('#datepicker')[0],
-            firstDay: 1,
-            minDate: new Date(2000, 0, 1),
-            maxDate: new Date(2020, 12, 31),
-            yearRange: [2000, 2020],
-            onSelect: function(date) {
-                console.log($('#datepicker').val());
-                picker.setStartRange();
-            }
-        });
-*/
     })
 
     .controller('InputController', function($scope, greeter, user, request_values) {
     	var handleErrors = function(errors) {
-            console.log("handleErrors");
-            console.log("errors:");
-            console.log(errors);
             var error;
             var errorCode;
             for (var i = 0; i < errors.length; i++) {
-                console.log(errors[i]);
                 error = errors[i].Error;
-                console.log(error.length);
                 for (var j = 0; j < error.length; j++) {
                     errorCode = error[j].ErrorCode;
-                    console.log(errorCode);
-                    console.log(errorCode.length);
                     for (var k = 0; k < errorCode.length; k++) {
-                        console.log(errorCode[k]);
                         if (errorCode[k] == "102025") {
                             alert(error[j].ErrorMessage[k]);
                         }
@@ -198,13 +173,7 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
 
         $scope.location = "";
         $scope.greeting = greeter.greet(user.name);
-        // $scope.request_info = {
-        //     dest: "LAX",
-        //     startdate:   "11/01/2015",
-        //     enddate:     "11/10/2015",
-        //     pickuptime:  "09:30",
-        //     dropofftime: "13:00"
-        // };
+
         $scope.getResults = function() {
             if (request_values.startdate <= request_values.enddate) {
                 request_values.set({
@@ -233,8 +202,8 @@ angular.module('main', ['xmpl.service', 'xmpl.directive', 'xmpl.filter', 'viz'])
                         console.log($scope.results);
                         console.log($scope.results[0].PickupDay + ", " + $scope.results[0].DropoffDay);
                     } else {
+                        console.log("error from api");
                         handleErrors(errors);
-                        
                     }
                     
                     
