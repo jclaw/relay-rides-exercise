@@ -1,26 +1,6 @@
 (function(angular) {
 	'use strict';
  
-/*
-angular.module('modal.service', [])
-    .value('modal', {
-        header: "test header",
-        body: "test body",
-        footer: "test footer",
-        set: function(content) {
-            if (content.header) this.header = content.header;
-            if (content.body) this.body = content.body;
-            if (content.footer) this.footer = content.footer;
-        },
-        get: function() {
-            return {
-                header: this.header,
-                body: this.body,
-                footer: this.footer
-            };
-        }
-    });
-*/
 angular.module('main.service', [])
 
     .value('request_values', {
@@ -62,7 +42,7 @@ angular.module('main.directive', []);
 
 angular.module('main.filter', []);
 
-angular.module('main', ['main.service', 'main.directive', 'main.filter'/*, 'viz'*/])
+angular.module('main', ['main.service', 'main.directive', 'main.filter'])
 
     .run(function(request_values) {
     // This is effectively part of the main method initialization code
@@ -124,7 +104,7 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'/*, 'viz'
             }
     })
 
-    .controller('InputController', function($scope, request_values /*, modal*/) {
+    .controller('InputController', function($scope, request_values) {
     	var handleErrors = function(errors) {
             var error;
             var errorCode;
@@ -230,20 +210,20 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'/*, 'viz'
                 console.log(request_values.get());
                 
 
-                // $.ajax({
-                //     type: 'POST',
-                //     url: 'http://relay-rides-server.herokuapp.com/getResults/',
-                //     data: request_values.get(),
-                //     dataType: "text"
-                // })
-                // .done(function(data, status) {
-                //     $scope.results = data;
-                //     console.log("SUCCESS");
-                //     console.log(status);
-                //     var json = $.parseJSON(data);
-                //     var response = json.Hotwire;
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://relay-rides-server.herokuapp.com/getResults/',
+                    data: request_values.get(),
+                    dataType: "text"
+                })
+                .done(function(data, status) {
+                    $scope.results = data;
+                    console.log("SUCCESS");
+                    console.log(status);
+                    var json = $.parseJSON(data);
+                    var response = json.Hotwire;
 
-                    var response = sampledata;
+                    // var response = sampledata;
                     var errors = response.Errors;
                     console.log(response);
                     console.log(errors);
@@ -259,11 +239,11 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'/*, 'viz'
                     }
                     
             
-                // })
-                // .fail(function(response, status) {
-                //     console.log("ERROR");
-                //     console.log(status);
-                // });
+                })
+                .fail(function(response, status) {
+                    console.log("ERROR");
+                    console.log(status);
+                });
             
 
             } else {
@@ -310,19 +290,6 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'/*, 'viz'
         }
 
     });
-/*
-angular.module('viz', ['modal.service'])
-
-    .controller('ListingsController', function($scope, modal) {
-
-
-    });
-
-angular.module('modal', ['modal.service'])
-    .controller('ModalController', function($scope, modal) {
-
-    }); 
-*/
 
 
 })(window.angular);
