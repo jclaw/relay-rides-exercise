@@ -9,6 +9,7 @@
     <script language="javascript" type="text/javascript" src="node_modules/angular/angular.js"></script>
 	<script language="javascript" type="text/javascript" src="Pikaday/pikaday.js"></script>
 	<script language="javascript" type="text/javascript" src="Pikaday/plugins/pikaday.jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="node_modules/bootstrap/js/modal.js"></script>
 	<script language="javascript" type="text/javascript" src="js/date.js"></script>
     <script language="javascript" type="text/javascript" src="js/app.js"></script>
 
@@ -17,16 +18,16 @@
     <link rel="stylesheet" href="Pikaday/css/pikaday.css">
     <link rel="stylesheet" href="css/main.css">
 </head>
-<body ng-app="main">
-    <div class="container" ng-controller="InputController">
+<body ng-app="main" ng-controller="InputController">
+    <div class="container">
     	<div class="spacer">
     	</div>
     	<div class="row col-md-8 col-md-offset-2">
     		
     		<div class="row input_fields">
-    			<input type="text" class="form-control" ng-model="location" placeholder="Pick a location">
-    			<input type="text" class="form-control" id="start" placeholder="Start date">
-    			<input type="text" class="form-control" id="end" placeholder="End date">
+    			<input type="text" class="form-control" ng-model="locations" placeholder="Pick a location">
+    			<input type="text" class="form-control picker" id="start" placeholder="Start date" readonly>
+    			<input type="text" class="form-control picker" id="end" placeholder="End date" readonly>
 		      	
 		        <button class="btn btn-default" type="button" ng-click='getResults()'>Search</button>
 
@@ -39,14 +40,41 @@
 
     	</div>
 
-    	<div class="row col-md-8 col-md-offset-2" id="results" ng-repeat="item in results">
-    		<p>{{item.result.DailyRate[0]}}</p>
-    	</div>
+		<ul class="list-group col-md-8 col-md-offset-2" id="results">
 
+		  	<a href="#" class="list-group-item" ng-repeat="item in results track by $index" ng-click="displayModal($index)">
+		  		{{item.metadata.CarTypeName[0]}} – ${{item.result.DailyRate[0]}}
+		  	</a>
+		</ul>
 
     	
     </div>
 
+<!-- Modal -->
+<div id="resultModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div id="m-header" class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-pricebox">
+        	<h2 id="m-price" class="modal-price">$150</h2>
+        	<span class="modal-subtitle">/ day</span>
+        </div>
+        <h4 id="m-title" class="modal-title">Modal Header</h4>
+        <span id="m-subtitle" class="modal-subtitle">SUBTITLE</span>
+      </div>
+      <div id="m-body" class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 </body>
