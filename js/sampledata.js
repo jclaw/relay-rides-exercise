@@ -1,4 +1,4 @@
-{
+var sampledata = {
   "Errors": [
     ""
   ],
@@ -1008,4 +1008,4 @@
   "StatusDesc": [
     "success"
   ]
-}
+};

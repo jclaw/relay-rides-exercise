@@ -18,42 +18,49 @@ body {
 
 }
 
-.btn {
+/*.btn .btn-primary {
 	color: white;
 	font-weight: 400;
 	background-color: #217668;
 	border-color: #217668;
-}
+}*/
 
 .picker {
 	background-color: white !important;
 	cursor: pointer;
 }
 
+/*.input_fields * {
+	width: auto;
+	display: inline-block;
+}*/
+
+
 .input_fields .form-control {
 	width: auto;
 	display: inline-block;
-	margin-right: -4px;
-	border-right: none;
+	/*margin-right: -4px;*/
+	/*border-right: none;
 	border-top-right-radius: 0px;
-	border-bottom-right-radius: 0px;
+	border-bottom-right-radius: 0px;*/
 }
 
 .input_fields > :not(:first-child):not(:last-child) {
-	border-radius: 0px;
+	/*border-radius: 0px;*/
 }
 
-.input_fields .btn {
-	border-top-left-radius: 0px;
-	border-bottom-left-radius: 0px;
-	margin-left: -1px;
-	margin-bottom: 2px;
+.input_fields > .btn {
+	/*border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;*/
+	/*margin-left: -1px;
+*/	margin-bottom: 2px;
 	width: 15%;
 }
 
 .input_fields .picker {
 	display: inline-block;
 }
+*/
 
 .modal-pricebox {
 	float: right;

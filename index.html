@@ -6,11 +6,13 @@
 
 
     <script language="javascript" type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script language="javascript" type="text/javascript" src="node_modules/angular/angular.js"></script>
 	<script language="javascript" type="text/javascript" src="Pikaday/pikaday.js"></script>
 	<script language="javascript" type="text/javascript" src="Pikaday/plugins/pikaday.jquery.js"></script>
 	<script language="javascript" type="text/javascript" src="node_modules/bootstrap/js/modal.js"></script>
 	<script language="javascript" type="text/javascript" src="js/date.js"></script>
+	<script language="javascript" type="text/javascript" src="js/sampledata.js"></script>
     <script language="javascript" type="text/javascript" src="js/app.js"></script>
 
 
@@ -19,26 +21,73 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body ng-app="main" ng-controller="InputController">
+
     <div class="container">
-    	<div class="spacer">
+    	<!-- <div class="spacer">
     	</div>
     	<div class="row col-md-8 col-md-offset-2">
     		
-    		<div class="row input_fields">
+    		<div class="input_fields">
     			<input type="text" class="form-control" ng-model="locations" placeholder="Pick a location">
+    			
+
     			<input type="text" class="form-control picker" id="start" placeholder="Start date" readonly>
+    			<div class="btn-group">
+				  	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				    	Action <span class="caret"></span>
+				  	</button>
+				  	<ul class="dropdown-menu">
+				    	<li><a href="#">Action</a></li>
+
+				  	</ul>
+				</div>
+
+
+
+
     			<input type="text" class="form-control picker" id="end" placeholder="End date" readonly>
 		      	
-		        <button class="btn btn-default" type="button" ng-click='getResults()'>Search</button>
+		        <button class="btn btn-primary" type="button" ng-click='getResults()'>Search</button>
 
 		    </div>
-		    <!--
-		    <div ng-controller="ListingsController">
-		    	<button class="btn btn-default" type="button" ng-click='test()'>Search</button>
-		    </div>
-		-->
 
+
+    	</div> -->
+
+
+		<div class="spacer">
     	</div>
+    	<div class="row">
+    		<div class="col-lg-3 col-md-offset-1">
+    			<input type="text" class="form-control" ng-model="locations" placeholder="Pick a location">
+    		</div>
+    		<div class="col-lg-3">
+    			<div class="input-group">
+			      	<input type="text" id="start" class="form-control picker" aria-label="Start date" placeholder="Start date" readonly>
+			      	<div id="start_dropdown" class="input-group-btn">
+			        	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">12:00pm <span class="caret"></span></button>
+			        	<ul class="dropdown-menu dropdown-menu-right">
+			          		<li ng-repeat="time in times track by $index" ng-click="getSelectedTime('start', $index)"><a href="#">{{time}}</a></li>
+			        	</ul>
+			      	</div>
+			    </div>
+    		</div>
+    		<div class="col-lg-3">
+    			<div class="input-group">
+			      	<input type="text" id="end" class="form-control picker" aria-label="End date" placeholder="End date" readonly>
+			      	<div id="end_dropdown" class="input-group-btn">
+			        	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">12:00pm <span class="caret"></span></button>
+			        	<ul class="dropdown-menu dropdown-menu-right">
+			          		<li><a href="#">Action</a></li>
+			          		<li><a href="#">Action</a></li>
+			        	</ul>
+			      	</div>
+			    </div>
+    		</div>
+    		<button class="btn btn-primary col-lg-1" type="button" ng-click='getResults()'>Search</button>
+    	</div>
+		
+
 
 		<ul class="list-group col-md-8 col-md-offset-2" id="results">
 
@@ -49,6 +98,8 @@
 
     	
     </div>
+
+
 
 <!-- Modal -->
 <div id="resultModal" class="modal fade" role="dialog">
