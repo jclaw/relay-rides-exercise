@@ -46,7 +46,8 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
 
     .run(function(request_values) {
     // This is effectively part of the main method initialization code
-        request_values.initialize();
+
+    // these declarations are mostly from dbushell's Pikaday date-range.html example
         var startDate,
             endDate,
             updateStartDate = function() {
@@ -71,7 +72,7 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
             startPicker = new Pikaday({
                 field: document.getElementById('start'),
                 minDate: new Date(),
-                maxDate: new Date(2020, 12, 31),
+                maxDate: (new Date()).setFullYear(new Date().getFullYear() + 5, 12, 31),
                 onSelect: function() {
                     startDate = this.getDate();
                     console.log("startDate");
@@ -84,7 +85,7 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
             endPicker = new Pikaday({
                 field: document.getElementById('end'),
                 minDate: new Date(),
-                maxDate: new Date(2020, 12, 31),
+                maxDate: (new Date()).setFullYear(new Date().getFullYear() + 5, 12, 31),
                 onSelect: function() {
                     endDate = this.getDate();
                     updateEndDate();
@@ -105,7 +106,7 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
     })
 
     .controller('InputController', function($scope, request_values) {
-    	var handleErrors = function(errors) {
+    	var handle_errors = function(errors) {
             var error;
             var errorCode;
             for (var i = 0; i < errors.length; i++) {
@@ -119,7 +120,7 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
             }
         }
 
-        var parseResults = function(response) {
+        var parse_results = function(response) {
             var metadata = response.MetaData[0].CarMetaData[0].CarTypes[0].CarType;
             var results = response.Result[0].CarResult;
             var output = [{}];
@@ -135,7 +136,7 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
             return output;
         }
 
-        var leadingZero = function(num) {
+        var leading_zero = function(num) {
             if (num < 10) return "0" + num;
             return num.toString();
         }
@@ -172,7 +173,7 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
             return timesplit[0] + ":" + timesplit[1];
         }
                      
-        var generateTimes = function() {
+        var generate_times = function() {
             var times = [];
             var hour_divisions = 2;
             var starting_hour = 9;
@@ -184,8 +185,8 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
             for (var hours = starting_hour; hours < ending_hour; hours++) {
                 for (var j = 0; j < hour_divisions; j++) {
 
-                    minutes = leadingZero(j * 60 / hour_divisions);
-                    str = leadingZero(hours) + ":" + minutes;
+                    minutes = leading_zero(j * 60 / hour_divisions);
+                    str = leading_zero(hours) + ":" + minutes;
                     times[i] = time_mil_to_std(str);
                     i++;
                 }
@@ -195,11 +196,11 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
         }                                
 
         $scope.loc = "";
-        $scope.times = generateTimes();
+        $scope.times = generate_times();
         $scope.pickuptime = request_values.get().pickuptime;
         $scope.dropofftime = request_values.get().dropofftime;
 
-        $scope.getResults = function() {
+        $scope.get_results = function() {
             console.log($scope.loc);
             if (request_values.startdate <= request_values.enddate) {
                 request_values.set({
@@ -210,6 +211,7 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
                 console.log(request_values.get());
                 
 
+                $("#search").text("Loading...");
                 $.ajax({
                     type: 'POST',
                     url: 'http://relay-rides-server.herokuapp.com/getResults/',
@@ -217,6 +219,8 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
                     dataType: "text"
                 })
                 .done(function(data, status) {
+                    
+                    $("#search").text("Search");
                     $scope.results = data;
                     console.log("SUCCESS");
                     console.log(status);
@@ -228,14 +232,14 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
                     console.log(response);
                     console.log(errors);
                     if (errors[0] == "") {
-                        $scope.results = parseResults(response);
+                        $scope.results = parse_results(response);
                         $scope.$evalAsync();
                         console.log("$scope.results: ");
                         console.log($scope.results);
                         console.log($scope.results[0].result.PickupDay + ", " + $scope.results[0].result.DropoffDay);
                     } else {
                         console.log("error from api");
-                        handleErrors(errors);
+                        handle_errors(errors);
                     }
                     
             
@@ -253,7 +257,7 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
 
         };
 
-        $scope.getSelectedTime = function(name, index) {
+        $scope.get_selected_time = function(name, index) {
             if (name == "start") {
                 $scope.pickuptime = time_std_to_mil($scope.times[index]);
                 $("#start_dropdown > button").html($scope.times[index] + ' <span class="caret"></span>');
@@ -263,8 +267,7 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'])
             }
         }
 
-        $scope.displayModal = function(index) {
-            console.log('here');
+        $scope.display_modal = function(index) {
             var modal = $("#resultModal");
             var title = modal.find('#m-title');
             var subtitle = modal.find('#m-subtitle');

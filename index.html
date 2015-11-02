@@ -21,52 +21,59 @@
 </head>
 <body ng-app="main" ng-controller="InputController">
 
-    <div class="container">
-		<div class="spacer">
-    	</div>
-    	<div class="row search_area">
-    		<div class="col-xs-12 col-md-2 col-lg-2 col-lg-offset-1">
-    			<input type="text" class="form-control" ng-model="locations" placeholder="Pick a location">
-    		</div>
-    		<div class="col-xs-12 col-md-4 col-lg-3">
-    			<div class="input-group">
-			      	<input type="text" id="start" class="form-control picker" aria-label="Start date" placeholder="Start date" readonly>
-			      	<div id="start_dropdown" class="input-group-btn">
-			        	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">12:00pm <span class="caret"></span></button>
-			        	<ul class="dropdown-menu dropdown-menu-right">
-			          		<li ng-repeat="time in times track by $index" ng-click="getSelectedTime('start', $index)"><a href="#">{{time}}</a></li>
-			        	</ul>
-			      	</div>
-			    </div>
-    		</div>
-    		<div class="col-xs-12 col-md-4 col-lg-3">
-    			<div class="input-group">
-			      	<input type="text" id="end" class="form-control picker" aria-label="End date" placeholder="End date" readonly>
-			      	<div id="end_dropdown" class="input-group-btn">
-			        	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">12:00pm <span class="caret"></span></button>
-			        	<ul class="dropdown-menu dropdown-menu-right">
-			          		<li ng-repeat="time in times track by $index" ng-click="getSelectedTime('end', $index)"><a href="#">{{time}}</a></li>
-			        	</ul>
-			      	</div>
-			    </div>
-    		</div>
-    		<div class="col-xs-12 col-md-2 col-lg-2 button_column">
-    			<button class="btn btn-primary" type="button" ng-click='getResults()'>Search</button>
-    		</div>
-    		
-    	</div>
+<div class="container">
+	<div class="spacer">
+	</div>
+
+	<div class="row search_area">
+		<h1 class="col-lg-offset-1">Find a rental car</h1>
+		<div class="col-xs-12 col-md-2 col-lg-2 col-lg-offset-1">
+			<input type="text" class="form-control tab1" ng-model="loc" placeholder="Pick a location">
+		</div>
+		<div class="col-xs-12 col-md-4 col-lg-3">
+			<div class="input-group">
+		      	<input type="text" id="start" class="form-control picker tab2" aria-label="Start date" placeholder="Start date" readonly>
+		      	<div id="start_dropdown" class="input-group-btn">
+		        	<button type="button" class="btn btn-default dropdown-toggle tab3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">12:00pm <span class="caret"></span></button>
+		        	<ul class="dropdown-menu dropdown-menu-right">
+		          		<li ng-repeat="time in times track by $index" ng-click="get_selected_time('start', $index)"><a href="#">{{time}}</a></li>
+		        	</ul>
+		      	</div>
+		    </div>
+		</div>
+		<div class="col-xs-12 col-md-4 col-lg-3">
+			<div class="input-group">
+		      	<input type="text" id="end" class="form-control picker tab4" aria-label="End date" placeholder="End date" readonly>
+		      	<div id="end_dropdown" class="input-group-btn">
+		        	<button type="button" class="btn btn-default dropdown-toggle tab5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">12:00pm <span class="caret"></span></button>
+		        	<ul class="dropdown-menu dropdown-menu-right">
+		          		<li ng-repeat="time in times track by $index" ng-click="get_selected_time('end', $index)"><a href="#">{{time}}</a></li>
+		        	</ul>
+		      	</div>
+		    </div>
+		</div>
+		<div class="col-xs-12 col-md-2 col-lg-2 button_column">
+			<button id="search" class="btn btn-primary tab6" type="button" ng-click='get_results()'>Search</button>
+<!-- 			<div id="search_loading">
+				<img src="images/ajax-loader1.gif" alt="Please wait.." />
+			</div> -->
+		</div>
 		
+	</div>
+	
+<!-- 			<div class="image">
+				<img src="images/loading.gif" alt="Please wait.." />
+			</div> -->
 
+	<ul class="col-md-12 col-lg-10 col-lg-offset-1 list-group" id="results">
 
-		<ul class="col-md-12 col-lg-10 col-lg-offset-1 list-group" id="results">
+	  	<a href="#" class="list-group-item" ng-repeat="item in results track by $index" ng-click="display_modal($index)">
+	  		{{item.metadata.CarTypeName[0]}} – ${{item.result.DailyRate[0]}}
+	  	</a>
+	</ul>
 
-		  	<a href="#" class="list-group-item" ng-repeat="item in results track by $index" ng-click="displayModal($index)">
-		  		{{item.metadata.CarTypeName[0]}} – ${{item.result.DailyRate[0]}}
-		  	</a>
-		</ul>
-
-    	
-    </div>
+	
+</div>
 
 
 
