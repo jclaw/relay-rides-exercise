@@ -27,8 +27,8 @@ angular.module('main.service', [])
         dest: "",
         startdate: "",
         enddate: "",
-        pickuptime: "12:00pm",
-        dropofftime: "12:00pm",
+        pickuptime: "12:00",
+        dropofftime: "12:00",
         initialize: function() {
             var d1 = new Date(), d2 = new Date();
             d1.setDate(d1.getDate() + 1);
@@ -36,8 +36,8 @@ angular.module('main.service', [])
             this.dest = "LAX";
             this.startdate = d1.format("MM/dd/yyyy");
             this.enddate = d2.format("MM/dd/yyyy");
-            this.pickuptime = "12:00pm";
-            this.dropofftime = "12:00pm";
+            this.pickuptime = "12:00";
+            this.dropofftime = "12:00";
         },
         set: function(req) {
             if (req.dest) this.dest = req.dest;
@@ -224,26 +224,26 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'/*, 'viz'
             if (request_values.startdate <= request_values.enddate) {
                 request_values.set({
                     dest: $scope.loc,
-                    pickuptime: time_std_to_mil($scope.pickuptime),
-                    dropofftime: time_std_to_mil($scope.dropofftime)
+                    pickuptime: $scope.pickuptime,
+                    dropofftime: $scope.dropofftime
                 });
                 console.log(request_values.get());
                 
 
-                $.ajax({
-                    type: 'POST',
-                    url: 'http://relay-rides-server.herokuapp.com/getResults/',
-                    data: request_values.get(),
-                    dataType: "text"
-                })
-                .done(function(data, status) {
-                    $scope.results = data;
-                    console.log("SUCCESS");
-                    console.log(status);
-                    var json = $.parseJSON(data);
-                    var response = json.Hotwire;
+                // $.ajax({
+                //     type: 'POST',
+                //     url: 'http://relay-rides-server.herokuapp.com/getResults/',
+                //     data: request_values.get(),
+                //     dataType: "text"
+                // })
+                // .done(function(data, status) {
+                //     $scope.results = data;
+                //     console.log("SUCCESS");
+                //     console.log(status);
+                //     var json = $.parseJSON(data);
+                //     var response = json.Hotwire;
 
-                    // var response = sampledata;
+                    var response = sampledata;
                     var errors = response.Errors;
                     console.log(response);
                     console.log(errors);
@@ -259,11 +259,11 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'/*, 'viz'
                     }
                     
             
-                })
-                .fail(function(response, status) {
-                    console.log("ERROR");
-                    console.log(status);
-                });
+                // })
+                // .fail(function(response, status) {
+                //     console.log("ERROR");
+                //     console.log(status);
+                // });
             
 
             } else {
@@ -275,8 +275,11 @@ angular.module('main', ['main.service', 'main.directive', 'main.filter'/*, 'viz'
 
         $scope.getSelectedTime = function(name, index) {
             if (name == "start") {
-                $scope.pickuptime = $scope.times[index];
-                $("#start_dropdown > button").html($scope.pickuptime + ' <span class="caret"></span>');
+                $scope.pickuptime = time_std_to_mil($scope.times[index]);
+                $("#start_dropdown > button").html($scope.times[index] + ' <span class="caret"></span>');
+            } else if (name == "end") {
+                $scope.dropofftime = time_std_to_mil($scope.times[index]);
+                $("#end_dropdown > button").html($scope.times[index] + ' <span class="caret"></span>');
             }
         }
 

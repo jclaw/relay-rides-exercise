@@ -84,3 +84,7 @@ body {
 .modal-pricebox .modal-subtitle {
 	font-size: 14px;
 }
+
+.button_column > button {
+	width: 100%;
+}

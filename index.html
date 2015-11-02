@@ -58,10 +58,10 @@
 		<div class="spacer">
     	</div>
     	<div class="row">
-    		<div class="col-lg-3 col-md-offset-1">
+    		<div class="col-xs-12 col-lg-2 col-lg-offset-1">
     			<input type="text" class="form-control" ng-model="locations" placeholder="Pick a location">
     		</div>
-    		<div class="col-lg-3">
+    		<div class="col-xs-12 col-lg-3">
     			<div class="input-group">
 			      	<input type="text" id="start" class="form-control picker" aria-label="Start date" placeholder="Start date" readonly>
 			      	<div id="start_dropdown" class="input-group-btn">
@@ -72,19 +72,21 @@
 			      	</div>
 			    </div>
     		</div>
-    		<div class="col-lg-3">
+    		<div class="col-xs-12 col-lg-3">
     			<div class="input-group">
 			      	<input type="text" id="end" class="form-control picker" aria-label="End date" placeholder="End date" readonly>
 			      	<div id="end_dropdown" class="input-group-btn">
 			        	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">12:00pm <span class="caret"></span></button>
 			        	<ul class="dropdown-menu dropdown-menu-right">
-			          		<li><a href="#">Action</a></li>
-			          		<li><a href="#">Action</a></li>
+			          		<li ng-repeat="time in times track by $index" ng-click="getSelectedTime('end', $index)"><a href="#">{{time}}</a></li>
 			        	</ul>
 			      	</div>
 			    </div>
     		</div>
-    		<button class="btn btn-primary col-lg-1" type="button" ng-click='getResults()'>Search</button>
+    		<div class="col-xs-12 col-lg-2 button_column">
+    			<button class="btn btn-primary" type="button" ng-click='getResults()'>Search</button>
+    		</div>
+    		
     	</div>
 		
 
